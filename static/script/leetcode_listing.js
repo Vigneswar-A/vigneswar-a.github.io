@@ -32,7 +32,7 @@ async function renderCards(prefix = '') {
             let { name, path } = item;
             let question_id = name.replace('.py', '');
             name = slugs[Number.parseInt(question_id)]
-            if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
+            if (prefix === '' || name.toLowerCase().startsWith(prefix.toLowerCase())) {
                 let card = await makeCard(name, path);
                 content.appendChild(card);
             }
@@ -54,9 +54,7 @@ fetch('programming/lc.json').then(res => res.json()).then(res => {
 
 
 renderCards();
-
 let search_bar = document.getElementById("search_bar")
-
 search_bar.addEventListener('input', (e) => {
     renderCards(search_bar.value);
 })

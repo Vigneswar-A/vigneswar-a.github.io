@@ -31,7 +31,7 @@ async function renderCards(prefix = '') {
         for (let item of list) {
             let { name, path } = item;
             name = name.replace('.pdf', '').replace(/_/g, ' ');
-            if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
+            if (prefix === '' || name.toLowerCase().startsWith(prefix.toLowerCase())) {
                 let card = await makeCard(name, path);
                 content.appendChild(card);
             }

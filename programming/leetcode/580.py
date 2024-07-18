@@ -1,0 +1,1 @@
+SELECT DEPT_NAME, (SELECT COUNT(*) FROM STUDENT WHERE STUDENT.DEPT_ID = DEPARTMENT.DEPT_ID) as student_number FROM DEPARTMENT order by student_number desc, dept_name asc

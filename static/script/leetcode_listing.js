@@ -14,26 +14,47 @@ async function getListing() {
     }
 }
 
-async function makeCard(name, question_id) {
+async function makeCard(name, path) {
     let card = document.createElement('a');
     card.innerText = name;
-    card.href = `programming/view_code.html?question_id=${question_id}`;
+    card.href = `programming/view_code.html?code_path=${path}`;
     return card;
 }
 
+async function getSlugs() {
+    try {
+        let slugs = {};
+        const response = await fetch('programming/lc.json');
+        const res = await response.json();
+
+        let questions = res.stat_status_pairs;
+        for (let question of questions) {
+            slugs[question.stat.question_id] = question.stat.question__title;
+        }
+
+        return slugs;
+    } catch (error) {
+        console.error('Error fetching slugs:', error);
+        return {}; // Return empty object or handle error appropriately
+    }
+}
 
 async function renderCards(prefix = '') {
     let content = document.getElementById("content");
+    let loading = document.getElementById("loading");
     loading.style.display = 'block';
+
     try {
-        const list = await getListing();
+        let slugs = await getSlugs();
+        let list = await getListing();
+
         content.innerHTML = '';
         for (let item of list) {
-            let { name } = item;
+            let { name, path } = item;
             let question_id = name.replace('.py', '');
-            name = slugs[Number.parseInt(question_id)]
-            if (prefix === '' || name.toLowerCase().startsWith(prefix.toLowerCase())) {
-                let card = await makeCard(name, question_id);
+            let question_title = slugs[Number.parseInt(question_id)];
+            if (question_title && (prefix === '' || question_title.toLowerCase().startsWith(prefix.toLowerCase()))) {
+                let card = await makeCard(question_title, path);
                 content.appendChild(card);
             }
         }
@@ -44,17 +65,9 @@ async function renderCards(prefix = '') {
     }
 }
 
-let slugs = {};
-fetch('programming/lc.json').then(res => res.json()).then(res => {
-    let questions = res.stat_status_pairs;
-    for (let question of questions) {
-        slugs[question.stat.question_id] = question.stat.question__title;
-    }
-});
-
-
 renderCards();
-let search_bar = document.getElementById("search_bar")
-search_bar.addEventListener('input', (e) => {
+
+let search_bar = document.getElementById("search_bar");
+search_bar.addEventListener('input', () => {
     renderCards(search_bar.value);
-})
+});

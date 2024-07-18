@@ -205,7 +205,6 @@ h1 {
     font-family: 'Courier New', Courier, monospace;
     text-decoration: none;
     border: 2px solid black;
-    text-wrap: wrap;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -227,4 +226,42 @@ h1 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     padding: 10px;
 
+}
+
+
+#code {
+    display: flex;
+    color: rgb(255, 255, 255);
+    margin: 3rem;
+    margin-left: 0;
+    padding: 1rem;
+    justify-content: left;
+    background-color: rgb(101, 101, 101);
+    border: 2px dashed black;
+    border-left: 1px solid black;
+    width: 100%;
+    text-wrap: nowrap;
+}
+
+#code-container {
+    display: flex;
+    justify-content: row;
+    flex-grow: 1;
+    align-items: center;
+    font-size: medium;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+#line-numbers {
+    display: flex;
+    color: rgb(255, 255, 255);
+    margin-left: 0;
+    padding: 1rem 0.5rem;
+    margin-left: 2rem;
+    line-height: 1rem;
+    justify-content: left;
+    background-color: rgb(101, 101, 101);
+    border: 2px dashed black;
+    border-right: 1px solid black;
 }

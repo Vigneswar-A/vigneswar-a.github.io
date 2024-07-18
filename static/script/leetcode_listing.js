@@ -1,17 +1,38 @@
-async function getListing() {
-    try {
-        const response = await fetch(`https://api.github.com/repos/vigneswar-a/vigneswar-a.github.io/contents/${document.location.pathname.replace('.html', '')}`);
+let slugs = {}; // Cached object for slugs
+let list = []; // Cached array for listing
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+async function getSlugs() {
+    if (Object.keys(slugs).length === 0) { // Check if slugs are already fetched
+        try {
+            const response = await fetch('programming/lc.json');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const res = await response.json();
+            let questions = res.stat_status_pairs;
+            for (let question of questions) {
+                slugs[question.stat.question_id] = question.stat.question__title;
+            }
+        } catch (error) {
+            console.error('Error fetching slugs:', error);
         }
-
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return [];
     }
+    return slugs;
+}
+
+async function getListing() {
+    if (list.length === 0) { // Check if listing is already fetched
+        try {
+            const response = await fetch('programming/solved.json');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            list = await response.json();
+        } catch (error) {
+            console.error('Error fetching listing:', error);
+        }
+    }
+    return list;
 }
 
 async function makeCard(name, path) {
@@ -21,40 +42,24 @@ async function makeCard(name, path) {
     return card;
 }
 
-async function getSlugs() {
-    try {
-        let slugs = {};
-        const response = await fetch('programming/lc.json');
-        const res = await response.json();
-
-        let questions = res.stat_status_pairs;
-        for (let question of questions) {
-            slugs[question.stat.question_id] = question.stat.question__title;
-        }
-
-        return slugs;
-    } catch (error) {
-        console.error('Error fetching slugs:', error);
-        return {}; // Return empty object or handle error appropriately
-    }
-}
-
 async function renderCards(prefix = '') {
     let content = document.getElementById("content");
-    let loading = document.getElementById("loading");
     loading.style.display = 'block';
 
-    try {
-        let slugs = await getSlugs();
-        let list = await getListing();
+    // Fetch slugs and listing if not already cached
+    if (Object.keys(slugs).length === 0 || list.length === 0) {
+        await Promise.all([getSlugs(), getListing()]);
+    }
 
+    try {
         content.innerHTML = '';
         for (let item of list) {
-            let { name, path } = item;
+            let name = item;
+            let path = `programming/leetcode/${name}`;
             let question_id = name.replace('.py', '');
-            let question_title = slugs[Number.parseInt(question_id)];
-            if (prefix === '' || question_title.toLowerCase().startsWith(prefix.toLowerCase())) {
-                let card = await makeCard(question_title, path);
+            name = slugs[Number.parseInt(question_id)];
+            if (prefix === '' || name.toLowerCase().startsWith(prefix.toLowerCase())) {
+                let card = await makeCard(name, path);
                 content.appendChild(card);
             }
         }
@@ -65,9 +70,11 @@ async function renderCards(prefix = '') {
     }
 }
 
+// Initial rendering
 renderCards();
 
+// Event listener for search bar input
 let search_bar = document.getElementById("search_bar");
-search_bar.addEventListener('input', () => {
+search_bar.addEventListener('input', (e) => {
     renderCards(search_bar.value);
 });

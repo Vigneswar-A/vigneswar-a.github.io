@@ -8,11 +8,12 @@
 </head>
 
 <body>
-    <nav>
-        <a href="" target="_self">MrC0derH4cker</a>
-        <a href="writeups/hackthebox/machines.html" target="_self">Hackthebox Machines</a>
-        <a href="writeups/hackthebox/challenges/challenges.html" target="_self">Hackthebox Challenges</a>
-    </nav>
+    <div id="nav-container"></div>
+    <script>
+        fetch('nav.html').then(res => res.text()).then(res => {
+            document.getElementById('nav-container').insertAdjacentHTML('beforeend', res);
+        });
+    </script>
     <h1>Categories</h1>
     <div id="content">
         <a href="writeups/hackthebox/challenges/pwn.html" target="_self">Pwn</a>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MrC0derH4cker</title>
+    <base href="/" target="_blank">
+    <link rel="stylesheet" href="static/css/index.css">
+</head>
+
+<body>
+    <div id="nav-container"></div>
+    <script>
+        fetch('nav.html').then(res => res.text()).then(res => {
+            document.getElementById('nav-container').insertAdjacentHTML('beforeend', res);
+        });
+    </script>
+    <code id="code">
+    </code>
+    <script src="static/js/view_code.js"></script>
+</body>
+
+</html>

@@ -14,10 +14,10 @@ async function getListing() {
     }
 }
 
-async function makeCard(name, path) {
+async function makeCard(name, question_id) {
     let card = document.createElement('a');
     card.innerText = name;
-    card.href = path;
+    card.href = `programming/view_code.html?question_id=${question_id}`;
     return card;
 }
 
@@ -29,11 +29,11 @@ async function renderCards(prefix = '') {
         const list = await getListing();
         content.innerHTML = '';
         for (let item of list) {
-            let { name, path } = item;
+            let { name } = item;
             let question_id = name.replace('.py', '');
             name = slugs[Number.parseInt(question_id)]
             if (prefix === '' || name.toLowerCase().startsWith(prefix.toLowerCase())) {
-                let card = await makeCard(name, path);
+                let card = await makeCard(name, question_id);
                 content.appendChild(card);
             }
         }

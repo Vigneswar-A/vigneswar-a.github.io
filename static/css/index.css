@@ -210,3 +210,9 @@ h1 {
 #content a:hover {
     background-color: rgb(82, 126, 16);
 }
+
+#loading {
+    font-size: xx-large;
+    text-align: center;
+    margin: 100px;
+}

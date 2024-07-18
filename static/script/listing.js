@@ -23,10 +23,10 @@ async function makeCard(name, path) {
 
 async function renderCards() {
     let content = document.getElementById("content");
-
+    loading.style.display = 'block';
     try {
         const list = await getListing();
-
+        content.innerHTML = '';
         for (let item of list) {
             let { name, path } = item;
             let card = await makeCard(name.replace('.pdf', '').replace(/_/g, ' '), path);
@@ -34,6 +34,9 @@ async function renderCards() {
         }
     } catch (error) {
         console.error('Error rendering cards:', error);
+    } finally {
+        // Hide loading indicator after rendering cards or on error
+        loading.style.display = 'none';
     }
 }
 

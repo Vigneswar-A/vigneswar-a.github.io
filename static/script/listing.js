@@ -1,3 +1,5 @@
+let list = [];
+
 async function getListing() {
     try {
         const response = await fetch(`https://api.github.com/repos/vigneswar-a/vigneswar-a.github.io/contents/${document.location.pathname.replace('.html', '')}`);
@@ -7,11 +9,9 @@ async function getListing() {
         }
 
         const data = await response.json();
-        console.log(data);
-        return data;
+        list = data;
     } catch (error) {
         console.error('Error fetching data:', error);
-        return [];
     }
 }
 
@@ -22,16 +22,19 @@ async function makeCard(name, path) {
     return card;
 }
 
-async function renderCards() {
+async function renderCards(prefix = '') {
     let content = document.getElementById("content");
     loading.style.display = 'block';
     try {
-        const list = await getListing();
+        await getListing();
         content.innerHTML = '';
         for (let item of list) {
             let { name, path } = item;
-            let card = await makeCard(name.replace('.pdf', '').replace(/_/g, ' '), path);
-            content.appendChild(card);
+            name = name.replace('.pdf', '').replace(/_/g, ' ');
+            if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
+                let card = await makeCard(name, path);
+                content.appendChild(card);
+            }
         }
     } catch (error) {
         console.error('Error rendering cards:', error);
@@ -40,4 +43,11 @@ async function renderCards() {
     }
 }
 
+
 renderCards();
+
+let search_bar = document.getElementById("search_bar")
+
+search_bar.addEventListener('input', (e) => {
+    renderCards(search_bar.value);
+})

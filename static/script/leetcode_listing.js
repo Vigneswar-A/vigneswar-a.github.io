@@ -7,7 +7,6 @@ async function getListing() {
         }
 
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -22,7 +21,8 @@ async function makeCard(name, path) {
     return card;
 }
 
-async function renderCards() {
+
+async function renderCards(prefix = '') {
     let content = document.getElementById("content");
     loading.style.display = 'block';
     try {
@@ -30,9 +30,12 @@ async function renderCards() {
         content.innerHTML = '';
         for (let item of list) {
             let { name, path } = item;
-            let question_id = name.replace('.py', '').replace(/_/g, ' ');
-            let card = await makeCard(, path);
-            content.appendChild(card);
+            let question_id = name.replace('.py', '');
+            name = slugs[Number.parseInt(question_id)]
+            if (name.toLowerCase().startsWith(prefix.toLowerCase())) {
+                let card = await makeCard(name, path);
+                content.appendChild(card);
+            }
         }
     } catch (error) {
         console.error('Error rendering cards:', error);
@@ -41,4 +44,19 @@ async function renderCards() {
     }
 }
 
+let slugs = {};
+fetch('programming/lc.json').then(res => res.json()).then(res => {
+    let questions = res.stat_status_pairs;
+    for (let question of questions) {
+        slugs[question.stat.question_id] = question.stat.question__title;
+    }
+});
+
+
 renderCards();
+
+let search_bar = document.getElementById("search_bar")
+
+search_bar.addEventListener('input', (e) => {
+    renderCards(search_bar.value);
+})

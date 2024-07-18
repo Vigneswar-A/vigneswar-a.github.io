@@ -30,7 +30,8 @@ async function renderCards() {
         content.innerHTML = '';
         for (let item of list) {
             let { name, path } = item;
-            let card = await makeCard(name.replace('.pdf', '').replace(/_/g, ' '), path);
+            let question_id = name.replace('.py', '').replace(/_/g, ' ');
+            let card = await makeCard(, path);
             content.appendChild(card);
         }
     } catch (error) {

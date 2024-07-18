@@ -53,7 +53,7 @@ async function renderCards(prefix = '') {
             let { name, path } = item;
             let question_id = name.replace('.py', '');
             let question_title = slugs[Number.parseInt(question_id)];
-            if (question_title && (prefix === '' || question_title.toLowerCase().startsWith(prefix.toLowerCase()))) {
+            if (prefix === '' || question_title.toLowerCase().startsWith(prefix.toLowerCase())) {
                 let card = await makeCard(question_title, path);
                 content.appendChild(card);
             }

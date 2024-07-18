@@ -135,7 +135,7 @@ table {
 }
 
 body {
-    background-color: rgb(100, 100, 100);
+    background-color: rgb(40, 40, 40);
 }
 
 nav {
@@ -153,8 +153,8 @@ nav>a {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    background-color: greenyellow;
-    color: black;
+    background-color: rgb(40, 40, 40);
+    color: rgb(255, 255, 255);
     font-size: large;
     font-weight: bold;
     height: 100%;
@@ -172,7 +172,7 @@ nav>a {
 p {
     padding: 20px;
     font-size: large;
-    color: rgb(31, 16, 16);
+    color: rgb(255, 255, 255);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -180,24 +180,23 @@ h1 {
     padding: 20px;
     font-size: xx-large;
     text-align: center;
+    color: white;
 }
 
 #content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 10rem);
-    justify-content: space-between;
-    grid-gap: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 #content a {
     display: flex;
     margin: 10px;
-    height: 10rem;
-    width: 10rem;
+    width: 100%;
     justify-content: center;
-    background-color: greenyellow;
+    background-color: rgb(83, 83, 83);
     align-items: center;
-    color: black;
+    color: rgb(255, 255, 255);
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
     text-decoration: none;
@@ -208,7 +207,7 @@ h1 {
 }
 
 #content a:hover {
-    background-color: rgb(82, 126, 16);
+    background-color: rgb(62, 62, 62);
 }
 
 #loading {

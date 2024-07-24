@@ -168,10 +168,20 @@ nav>a {
     padding: 0 10px;
     box-sizing: border-box;
     flex: 1 1 auto;
+    flex-basis: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+@media (max-width: 1000px) {
+
+    #home,
+    #about {
+        display: none;
+    }
+}
+
 
 p {
     padding: 20px;

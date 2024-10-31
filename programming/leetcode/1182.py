@@ -1,0 +1,1 @@
+select round(count(distinct a1.player_id)/(select count(distinct player_id) from activity), 2) as fraction from activity a1 join activity a2 on datediff(a1.event_date, a2.event_date) = 1 and a1.player_id = a2.player_id where a2.event_date = (select min(event_date) from activity a3 where a1.player_id = a3.player_id);
